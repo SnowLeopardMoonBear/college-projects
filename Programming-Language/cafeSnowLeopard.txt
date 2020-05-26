@@ -1,0 +1,72 @@
+#설표다방에 오신 것을 환영합니다 ^오^!!!#
+
+#여기서는 손님 클래스와, 손님 클래스를 상속받은 고대생, 청소년 클래스를 정의했어요
+#여기서 만들어진 객체는 각자 주문하고 싶은 메뉴와 양을 떠올리고 있어요.
+#같은 종류 여러개 주문은 가능하지만, 여러 종류 주문은 어떻게 구현할지가 고민이에요(예:"유자차 두 잔, 아메리카노 한 잔 주세요!")
+class Customer:
+    def __init__(self, name, menu, quantity):
+        self.menu = menu
+        self.name = name
+        self.quantity = quantity
+        self.status = 'ordinary'
+
+class KU(Customer):
+    def __init__(self, name, menu, quantity):
+        Customer.__init__(self, name, menu, quantity)
+        self.status = 'KU'
+
+class Youth(Customer):
+    def __init__(self, name, menu, quantity):
+        Customer.__init__(self, name, menu, quantity)
+        self.status = 'youth'
+
+#여기서는 상속할 만한 것도 없고 여러 개 찍는 것도 아니라서 왜 굳이 객체로 만들어야 하는지는 의문이지만, 어쨌든 바리스타 클래스를 정의했어요.
+#가격과 소요시간을 열심히 계산하고, 주문자의 신상에 맞게 할인도 해주는 친구예요.
+class Barista:
+    def getOrder(self, name, menu, quantity, status):
+        self.totalprice = menu.price * quantity
+        if status == 'KU':
+            self.totalprice *= 0.8
+        if status == 'youth':
+            self.totalprice *= 0.7
+        self.totaltime = menu.time * quantity
+        print('%s님, 주문하신 음료 %s%s %d잔 %d원 결제 도와드리겠습니다. 소요시간 %d분정도 걸려요~' % (name, menu.name, menu.dtype, quantity, self.totalprice, self.totaltime) )
+        
+#음료 클래스를 만들어 이름, 가격, 소요시간을 넣었고요, 하위클래스로 차와 커피를 나눴어요.
+#넣고 싶은 메뉴의 수만큼 객체를 찍어낼 수 있습니다. 
+#하지만 굳이 클래스를 만들기보단 python에서 지원하는 2차원 배열에 쫘라락 넣어버리는게 훨씬 편해요.
+class Drink:
+    def __init__(self, name, price, time):
+        self.name = name
+        self.price = price
+        self.time = time
+
+class Tea(Drink):
+    def __init__(self, name, price, time):
+        Drink.__init__(self, name, price, time)
+        self.dtype = '차'
+
+class Coffee(Drink):
+    def __init__(self, name, price, time):
+        Drink.__init__(self, name, price, time)
+        self.dtype = '커피'
+
+#여기서부터가 main함수. 
+#교수님은 객체간에 서로 호출하고 데이터를 주고받는 부분은 굳이 class에 method로 구현하지 말고, main 함수를 이용하라 하셨어요#
+#1. 아래에서 필요한 데이터를 설정해주고
+jasmine = Tea('jasmine', 3000, 2)
+camomile = Tea('camomile', 3500, 3)
+latte = Coffee('latte', 2500, 3)
+americano = Coffee('americano', 2000, 2)
+중고 = Tea('중고', 5000, 10)
+
+customer1 = KU('Jaekwon', jasmine, 4)
+customer2 = Youth('단비', latte, 5)
+customerJinSang = Customer('진상고객', 중고, 10)
+
+Changhoon = Barista()
+#2. 실행!
+Changhoon.getOrder(customer1.name, customer1.menu, customer1.quantity, customer1.status)
+Changhoon.getOrder(customer2.name, customer2.menu, customer2.quantity, customer2.status)
+Changhoon.getOrder(customerJinSang.name, customerJinSang.menu, customerJinSang.quantity, customerJinSang.status)
+#혹시 구조에 이상한 건 없는지, 과제 요구사항 중 빠진 건 없는지, 생각했던 구조와 다른지 '피드백 꼭 부탁'해요!!!
